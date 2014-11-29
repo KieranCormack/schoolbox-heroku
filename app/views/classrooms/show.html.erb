@@ -1,0 +1,61 @@
+<div class="classroom-header">
+  <bh2><%= @classroom.subject %></bh2>
+  <hr>
+</div>
+
+
+<div class="classroom-body">
+  <div class="classroom-body-header">
+    <h2><%= @teacher %></h2>
+  </div>
+  <br>
+  <div class='select-students'>
+    <%= form_for @classroom, :id => 'class_form_id' do |f| %>
+    <div id="select-form-box">
+      <%= select_tag :student_ids, options_from_collection_for_select(@students, "id", "full_name"), multiple: true, class: "chosen-select", :data => {:placeholder => 'Select Students...'}%>
+    </div>
+    <div id="add-btn">
+      <%= submit_tag "Add Students", :class => 'btn btn-default' %>
+    </div>
+  </div>
+  <div class="email-form">
+    <h3> Send an email: </h3>
+    <%= render 'messages/form' %>
+  </div>
+  <div id="remove-btn">
+    <%= submit_tag "Remove students", :class => 'btn btn-default'  %>
+  </div>
+  <% end %>
+</div>
+
+<div class="students-body">
+  <div id="students-bar"><h2>Students</h2></div>
+  <div class="student-scroll-box">
+     <% @classroom.students.each do |student| %>
+      <div class="individual-student">
+        <div class='student-photo'><%= image_tag(student.avatar_file_name) %></div>
+        <div><input type="checkbox" name="ids_to_delete[]" value="<%= student.id %>" class="student-checkbox"/></div>
+        <h5><%= link_to student, student_path(student) %></h5>
+        <%= link_to(student_path(student)) do %>
+          <span class="glyphicon glyphicon-comment"></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  
+</div>
+
+<script type="text/javascript">
+$(function(){
+  $('.student-checkbox').on('click', function (argument) {    
+    if ($("class_form_id, input:checkbox:checked").length > 0){
+      console.log("worked");
+      $("#remove-btn").show();
+    }else{
+      console.log("worked2");
+       $("#remove-btn").hide();
+    };
+  });
+});
+</script>
+  
